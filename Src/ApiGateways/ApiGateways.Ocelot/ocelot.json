@@ -1,0 +1,49 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/Person/Get/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 10001
+        },
+        {
+          "Host": "localhost",
+          "Port": 10002
+        }
+      ],
+      "UpstreamPathTemplate": "/P/{id}",
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "person-profile"
+    },
+    {
+      "DownstreamPathTemplate": "/Order/GetByPersonId/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 10003
+        }
+      ],
+      "UpstreamPathTemplate": "/O/{id}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "person-orders"
+    }
+  ],
+  "Aggregates": [
+    {
+      "RouteKeys": [
+        "person-profile",
+        "person-orders"
+      ],
+      "UpstreamPathTemplate": "/OP/{id}"
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:10000"
+  }
+}
